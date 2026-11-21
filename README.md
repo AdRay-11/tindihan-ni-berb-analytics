@@ -10,16 +10,18 @@ CRISP-DM analysis of one year of online-store orders (UCI Online Retail, Dec 201
 |---|---|---|---|
 | RQ1 | Which products are bought together? | Apriori / FP-Growth, network graph | 54 rules, mean lift 12.3; 8 product families; hubs: Lunch Bag Pink Polkadot, Lunch Bag Red Retrospot |
 | RQ2 | What types of customers are there? | RFM + k-Means (k = 4) | Loyal / Big Spenders = 15.8% of customers, 64.0% of revenue; segments stable (ARI 0.974) |
-| RQ3 | When do sales happen? | Monthly trend, linear regression | Peak Sep–Nov 2011 (≈1.14M in Nov); spend driven by product variety (test R² 0.877) |
+| RQ3 | Which products and months sell most? | Monthly trend, product ranking, linear regression | Peak Sep–Nov 2011 (≈1.14M in Nov); top seller Regency Cakestand 3 Tier (≈142k); spend driven by product variety (test R² 0.877) |
 | RQ4 | Who is likely to cancel? | LogReg, LDA, Decision Tree, MLP | Balanced Logistic Regression: test ROC-AUC 0.771, recall 0.704, F1 0.637 |
 
 ## Repository layout
 
 ```
 notebooks/
+  01_EDA_Preprocessing.ipynb     # Phase 1: EDA, cleaning, feature engineering (saves data/*.csv)
   02_model_pipeline.ipynb        # Phase 2: all models, experiment log, model file
 scripts/
-  make_portfolio_charts.py       # Phase 3: rebuilds the visualization portfolio
+  make_portfolio_charts.py       # Phase 3: charts built from outputs/ (rules, segments, models)
+  make_data_charts.py            # Phase 3: charts that need data/ (revenue, top products, test ROC)
   style.py                       # shared chart style and colour palette
 outputs/
   Model_Experiment_Log.xlsx/.csv # 60 logged runs (ID, author, date, settings, metrics)
@@ -39,14 +41,15 @@ data/                            # raw data goes here (not committed)
 
 ```bash
 pip install -r requirements.txt
-# 1. Phase 1 (cleaning, see reports/Phase1_Business_Data_Preparation.pdf) produces
-#    basket_matrix.csv, customer_rfm.csv, customer_rfm_scaled.csv, cancellations.csv in data/
+# 1. Put "Online Retail.xlsx" in data/ and run notebooks/01_EDA_Preprocessing.ipynb there
+#    (saves clean_transactions.csv, basket_matrix.csv, customer_rfm*.csv, cancellations.csv)
 # 2. Run notebooks/02_model_pipeline.ipynb (writes outputs/)
 # 3. Rebuild the portfolio charts:
+python scripts/make_data_charts.py
 python scripts/make_portfolio_charts.py
 ```
 
-All random steps use `random_state = 42`. The Phase 2 notebook ends with 12 PASS/FAIL self-checks.
+All random steps use `random_state = 42`. Re-running Phase 1 reproduces every row count in the report (391,283 clean rows), and the saved model reproduces the test results (AUC 0.771). The Phase 2 notebook ends with 12 PASS/FAIL self-checks.
 
 ### Using the saved models
 

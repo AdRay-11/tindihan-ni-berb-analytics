@@ -202,10 +202,10 @@ ax.set_xlim(0,0.95); ax.grid(axis="y",visible=False)
 ax.set_title("What drives spending? Linear regression on log(Monetary)\n(test R² = 0.877; coefficient per 1 SD)",fontsize=10.5); save("F16_regression_coefs.png")
 
 # Phase 1/2 originals (charts whose raw data is not in the outputs folder)
-for src,dst in [("p1_monthly_revenue.png","F02_monthly_revenue.png"),("p1_orders_weekday_hour.png","F03_orders_weekday_hour.png"),
-                ("p1_spend_distribution.png","F04b_spend_distribution.png"),("nb_correlation.png","F04_correlation.png"),
+for src,dst in [
+                ("p1_spend_distribution.png","F04b_spend_distribution.png"),
                 ("nb_segment_scatter.png","F10_segment_scatter.png"),("nb_decision_tree.png","F15_decision_tree.png"),
-                ("nb_regression_fit.png","F16b_regression_fit.png"),("p1_top_cancelled.png","F17_top_cancelled.png"),("p1_outliers_boxplot.png","F00_outliers_boxplot.png"),("p1_corr_raw.png","F00b_corr_raw.png")]:
+                ("nb_regression_fit.png","F16b_regression_fit.png"),("p1_outliers_boxplot.png","F00_outliers_boxplot.png"),("p1_corr_raw.png","F00b_corr_raw.png")]:
     shutil.copy(PH+src,F+dst)
 print("done")
 
@@ -219,7 +219,7 @@ for i,(v,l,sub) in enumerate(kpis):
     ax.add_patch(FancyBboxPatch((0,0),1,1,boxstyle="round,pad=0,rounding_size=0.06",fc="#f4f3f0",ec="none",transform=ax.transAxes))
     ax.text(0.07,0.66,v,fontsize=24,fontweight="bold",color=INK,transform=ax.transAxes,va="center")
     ax.text(0.07,0.33,l,fontsize=10,color=INK,transform=ax.transAxes,va="center"); ax.text(0.07,0.13,sub,fontsize=8.5,color=MUTED,transform=ax.transAxes,va="center")
-ax=fig.add_axes([0.03,0.40,0.43,0.31]); im=Image.open(PH+"p1_monthly_revenue.png"); ax.imshow(im); ax.axis("off")
+ax=fig.add_axes([0.03,0.40,0.43,0.31]); im=Image.open(F+"F02_monthly_revenue.png"); ax.imshow(im); ax.axis("off")
 fig.text(0.03,0.725,"Revenue peaks Sep–Nov (pre-holiday season)",fontsize=11,fontweight="bold")
 ax=fig.add_axes([0.70,0.42,0.27,0.28])
 ax.barh(np.arange(4)-0.18,p["Customer_share_%"],0.34,color=BLUE,label="Customers"); ax.barh(np.arange(4)+0.18,p["Revenue_share_%"],0.34,color=ORANGE,label="Revenue")
